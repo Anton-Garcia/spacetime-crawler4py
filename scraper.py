@@ -28,7 +28,7 @@ def extract_next_links(url, resp):
     #otherwise, continue to look through the content
     else:
         #create a BeautifulSoup object to parse the html content of the webpage
-        soup_parser = BeautifulSoup(resp.raw_responce.content, "lxml-xml")
+        soup_parser = BeautifulSoup(resp.raw_response.content, "lxml-xml")
 
         #locate all anchor tags, <a>
         for link in soup_parser.find_all('a'):
