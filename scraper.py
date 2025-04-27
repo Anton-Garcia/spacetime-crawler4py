@@ -32,13 +32,10 @@ def extract_next_links(url, resp):
 
         #locate all anchor tags, <a>
         for link in soup_parser.find_all('a'):
-            #NEED TO FIX LINK SO IT IS DEFRAGMENTED~~~~~~~~~~~~     
-            #please test this
-            defragmented_link = defragment(link)      
-
-            #Links are verified in the scrapper function with is_valid
-            #so there is no need to check if the link is valid here 
-            all_links.append(defragmented_link)
+            href = link.get('href')
+            if href:
+                defragmented_link = defragment(href)
+                all_links.append(defragmented_link)
             
         
     return all_links
