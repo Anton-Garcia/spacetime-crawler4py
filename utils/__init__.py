@@ -33,3 +33,6 @@ def normalize(url):
     if url.endswith("/"):
         return url.rstrip("/")
     return url
+
+def get_texthash(text_content):
+    return sha256(text_content.encode("utf-8")).hexdigest()
