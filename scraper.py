@@ -1,6 +1,7 @@
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
+import shelve
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -82,6 +83,4 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
-
-def content_extraction(url):
     
