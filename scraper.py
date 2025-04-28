@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import shelve
 
+DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
+
 def scraper(url, resp):
     links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
@@ -37,9 +39,9 @@ def extract_next_links(url, resp):
             if href:
                 defragmented_link = defragment(href)
                 all_links.append(defragmented_link)
-            
         
     return all_links
+
 
 def defragment(url):
     #find the index of the # symbol that denotes a fragment
@@ -54,9 +56,7 @@ def defragment(url):
         return url[0 : index_of_pound]
         
 
-
-def is_valid(url):
-    #NEED TO FIX LINK SO WE ONLY CRAWL WITHIN GIVEN WEBSITE PATHS~~~~~~~~~~~~   
+def is_valid(url):   
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
     # There are already some conditions that return False.
@@ -64,6 +64,18 @@ def is_valid(url):
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
             return False
+        
+        #checks to make sure url's hostname is within our domain
+        #iterate through all domains using the any function()
+        #not any -> not any of the .endswith() return true
+        elif not any(parsed.hostname.endswith(domain) for domain in DOMAIN):
+            return False
+        
+        #checks valid domain name with starting path (for last case today.uci.edu/department/information_computer_sciences/)
+        elif(parsed.hostname.endswith("today.uci.edu") and parsed.path.startswith("/department/information_computer_sciences/") == False):
+            return False
+
+        #checks extension type; we dont want files that we can't read
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
             + r"|png|tiff?|mid|mp2|mp3|mp4"
@@ -73,13 +85,7 @@ def is_valid(url):
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"
             + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower())
-        # checks valid domain names
-        if parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu')):
-            return True
-        elif parsed.hostname == "today.uci.edu" and parsed.path.startswith("/department/information_computer_sciences/"):
-            return True
         
-
     except TypeError:
         print ("TypeError for ", parsed)
         raise
