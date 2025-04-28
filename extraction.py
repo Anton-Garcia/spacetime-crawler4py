@@ -31,7 +31,8 @@ def content_extractor(resp):
                 return soup_parser.get_text(seperator='\n', strip=True)
 
 #exact textual detection via hashing for blacklist
-def exact_detection(text):
+#low information value detection for blacklist
+def blacklist_detection(text):
     return False
 
 #download the text in a file for statistics postprocessing
@@ -48,7 +49,7 @@ def process_webpage_text(resp):
     webpage_text = content_extractor(resp)
 
     #check if the text we get is an exact duplicate from another webpage
-    if(exact_detection(webpage_text)):
+    if(blacklist_detection(webpage_text)):
         return
     
     #if it is not an exact duplicate, then we should save this page
