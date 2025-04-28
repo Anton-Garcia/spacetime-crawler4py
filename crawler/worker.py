@@ -5,7 +5,7 @@ from utils.download import download
 from utils import get_logger
 import scraper
 import time
-
+from extraction import process_webpage_text
 
 class Worker(Thread):
     def __init__(self, worker_id, config, frontier):
@@ -24,6 +24,9 @@ class Worker(Thread):
                 self.logger.info("Frontier is empty. Stopping Crawler.")
                 break
             resp = download(tbd_url, self.config, self.logger)
+            #Additional function - grab the text from the page to be used
+            #for statistics later
+            process_webpage_text(resp)
             self.logger.info(
                 f"Downloaded {tbd_url}, status <{resp.status}>, "
                 f"using cache {self.config.cache_server}.")
