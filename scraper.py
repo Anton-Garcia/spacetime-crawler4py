@@ -72,6 +72,12 @@ def is_valid(url):
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"
             + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower())
+        # checks valid domain names
+        if parsed.hostname.endswith(('ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu')):
+            return True
+        elif parsed.hostname == "today.uci.edu" and parsed.path.startswith("/department/information_computer_sciences/"):
+            return True
+        
 
     except TypeError:
         print ("TypeError for ", parsed)
