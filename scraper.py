@@ -73,7 +73,11 @@ def is_valid(url):
         #either because they are duplicates, or low information yielding webpages
         elif get_urlhash(url) in BLACKLIST:
             return False
-        
+
+        # incase hostname is empty (for whatever reason)
+        elif not parsed.hostname:
+            return False
+
         #checks to make sure url's hostname is within our domain
         #iterate through all domains using the any function()
         #not any -> not any of the .endswith() return true

@@ -55,6 +55,7 @@ def blacklist_detection(text):
 def download_text(text, url_name):
     folder_path = 'text_content'
     file_name = url_name
+    # replace so its a valid path
     good_file_name = file_name.replace("/", "_")
     full_path = f'{folder_path}/{good_file_name}'
     with open(full_path, 'w') as file:
