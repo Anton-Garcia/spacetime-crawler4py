@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from util import get_texthash
 
 #extracts useful text from the webpage response
 def content_extractor(resp):
@@ -33,14 +34,25 @@ def content_extractor(resp):
 #exact textual detection via hashing for blacklist
 #low information value detection for blacklist
 def blacklist_detection(text):
-    return False
+    if text == "":
+        return True
+    #need to add seen urls set here 
+    hashed_text = get_texthash(text)
+    elif hashed_text is in #seenurls
+        return True
+    else:
+        return False
 
 #download the text in a file for statistics postprocessing
-def download_text(text):
-    return
+def download_text(text, url_name):
+    folder_path = 'text_content'
+    file_name = url_name
+    full_path = f'{folder_path}/{file_name}'
+    with open(full_path, 'w') as file:
+        file.write(text)
 
 #overhead function to extract text, then download it if necessary
-def process_webpage_text(resp):
+def process_webpage_text(resp, url_name):
     #if no response, move onto next page
     if(resp.status != 200):
         return
@@ -50,8 +62,10 @@ def process_webpage_text(resp):
 
     #check if the text we get is an exact duplicate from another webpage
     if(blacklist_detection(webpage_text)):
-        return
+        with open('blacklist.txt', 'a') as file:
+            file.write(url_name)
+            file.write('\n')
     
     #if it is not an exact duplicate, then we should save this page
     else:
-        download_text(webpage_text)
+        download_text(webpage_text, url_name)
