@@ -83,6 +83,9 @@ def is_valid(url):
         #checks valid domain name with starting path (for last case today.uci.edu/department/information_computer_sciences/)
         elif(parsed.hostname.endswith("today.uci.edu") and parsed.path.startswith("/department/information_computer_sciences/") == False):
             return False
+        
+        elif(parsed.query):
+            return False
 
         #checks extension type; we dont want files that we can't read
         return not re.match(
@@ -98,4 +101,3 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
-    
