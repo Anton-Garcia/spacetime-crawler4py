@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 from utils import get_texthash
 
+seen_text = set()
+
 #extracts useful text from the webpage response
 def content_extractor(resp):
     #first, check if response is valid
@@ -34,17 +36,20 @@ def content_extractor(resp):
 #exact textual detection via hashing for blacklist
 #low information value detection for blacklist
 def blacklist_detection(text):
-    return False
-    """
+    #if the text retrieved from the webpage is blank, then
+    #we can say that it is low-value and can be blacklisted
     if text == "":
         return True
-    #need to add seen urls set here 
+    
+    #hash the text obtained to see if we get an exact match
     hashed_text = get_texthash(text)
-    elif hashed_text is in #seenurls
+
+    if hashed_text in seen_text:
         return True
+
     else:
+        seen_text.add(hashed_text)
         return False
-    """
 
 #download the text in a file for statistics postprocessing
 def download_text(text, url_name):
