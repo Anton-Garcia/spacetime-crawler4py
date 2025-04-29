@@ -55,7 +55,7 @@ def download_text(text, url_name):
         file.write(text)
 
 #overhead function to extract text, then download it if necessary
-def process_webpage_text(resp, url_name):
+def process_webpage_text(resp):
     #if no response, move onto next page
     if(resp.status != 200):
         return
@@ -66,9 +66,9 @@ def process_webpage_text(resp, url_name):
     #check if the text we get is an exact duplicate from another webpage
     if(blacklist_detection(webpage_text)):
         with open('blacklist.txt', 'a') as file:
-            file.write(url_name)
+            file.write(resp.url)
             file.write('\n')
     
     #if it is not an exact duplicate, then we should save this page
     else:
-        download_text(webpage_text, url_name)
+        download_text(webpage_text, resp.url)
