@@ -16,13 +16,13 @@ def content_extractor(resp):
         #try to get text from <main>
         main_content = soup_parser.find("main")
         if(main_content):
-            return main_content.get_text(seperator='\n', strip=True)
+            return main_content.get_text(separator='\n', strip=True)
     
         #if there is no <main>, check for <article>
         else:
             article_content = soup_parser.find("article")
             if(article_content):
-                return article_content.get_text(seperator='\n', strip=True)
+                return article_content.get_text(separator='\n', strip=True)
             
             #if there is no <main> or <article>, use whole body
             else:
@@ -31,7 +31,7 @@ def content_extractor(resp):
                 for invalid in soup_parser.find_all(["script", "style"]):
                     invalid.decompose()
 
-                return soup_parser.get_text(seperator='\n', strip=True)
+                return soup_parser.get_text(separator='\n', strip=True)
 
 #exact textual detection via hashing for blacklist
 #low information value detection for blacklist
@@ -55,7 +55,8 @@ def blacklist_detection(text):
 def download_text(text, url_name):
     folder_path = 'text_content'
     file_name = url_name
-    full_path = f'{folder_path}/{file_name}'
+    good_file_name = file_name.replace("/", "_")
+    full_path = f'{folder_path}/{good_file_name}'
     with open(full_path, 'w') as file:
         file.write(text)
 
