@@ -1,13 +1,13 @@
 import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from utils import get_urlhash
+from utils import get_urlhash, normalize
 import shelve
 
 #valid domains for urls
 DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
 #blacklisted url hashes
-BLACKLIST = []
+BLACKLIST = set()
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -71,7 +71,8 @@ def is_valid(url):
         
         #check if the url is blacklisted - do not attempt to download the webpage from these - 
         #either because they are duplicates, or low information yielding webpages
-        elif get_urlhash(url) in BLACKLIST:
+        normalized_url = normalize(url)
+        elif get_urlhash(normalized_url) in BLACKLIST:
             return False
 
         # incase hostname is empty (for whatever reason)
@@ -105,3 +106,15 @@ def is_valid(url):
     except TypeError:
         print ("TypeError for ", parsed)
         raise
+
+def blacklist_hasher(url):
+    # take each url in blacklist file, and put it in blacklist set while crawler runs
+    with open("blacklist.txt", "r") as file:
+        for line in file:
+            # normalize url for hashing
+            blacklist_normal = normalize(line)
+            # hashing url
+            blacklist_hash = get_urlhash(blacklist_normal)
+            # adding to set
+            BLACKLIST.add(blacklist_hash)
+            
