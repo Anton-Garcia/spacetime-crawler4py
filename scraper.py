@@ -66,13 +66,15 @@ def is_valid(url):
     # There are already some conditions that return False.
     try:
         parsed = urlparse(url)
+        # regex lambda for checking date formats in path (to avoid calendars)
+        contains_date = lambda path: bool(re.search(r'\b\d{4}-\d{2}-\d{2}\b', path))
+        
         if parsed.scheme not in set(["http", "https"]):
             return False
         
         #check if the url is blacklisted - do not attempt to download the webpage from these - 
         #either because they are duplicates, or low information yielding webpages
-        normalized_url = normalize(url)
-        elif get_urlhash(normalized_url) in BLACKLIST:
+        elif get_urlhash(normalize(url)) in BLACKLIST:
             return False
 
         # incase hostname is empty (for whatever reason)
@@ -90,6 +92,9 @@ def is_valid(url):
             return False
         
         elif(parsed.query):
+            return False
+
+        elif(contains_date(parsed.path)):
             return False
 
         #checks extension type; we dont want files that we can't read
