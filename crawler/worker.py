@@ -18,6 +18,9 @@ class Worker(Thread):
         super().__init__(daemon=True)
         
     def run(self):
+        #take all blacklist urls in the blacklist file and load them
+        #(used later in is_valid())
+        scraper.blacklist_hasher()
         while True:
             tbd_url = self.frontier.get_tbd_url()
             if not tbd_url:

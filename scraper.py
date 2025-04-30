@@ -91,9 +91,13 @@ def is_valid(url):
         elif(parsed.hostname.endswith("today.uci.edu") and parsed.path.startswith("/department/information_computer_sciences/") == False):
             return False
         
+        #reject all queries; 99% of them were leading to http errors when crawling and taking up large amount of time for downloads,
+        #so we choose to just reject all urls with queries
         elif(parsed.query):
             return False
 
+        #detects calendar traps - calendars have urls with the date in them, formatting shown in the
+        #lambda function above - (for example: 2019-04-19)
         elif(contains_date(parsed.path)):
             return False
 
@@ -112,7 +116,9 @@ def is_valid(url):
         print ("TypeError for ", parsed)
         raise
 
-def blacklist_hasher(url):
+#takes the urls that we blacklisted, hashes them, and stores them in the BLACKLIST set
+#for checking in is_valid 
+def blacklist_hasher():
     # take each url in blacklist file, and put it in blacklist set while crawler runs
     with open("blacklist.txt", "r") as file:
         for line in file:
@@ -122,4 +128,6 @@ def blacklist_hasher(url):
             blacklist_hash = get_urlhash(blacklist_normal)
             # adding to set
             BLACKLIST.add(blacklist_hash)
+
+    print("Number of items in the blacklist: " + BLACKLIST.length)
             
