@@ -67,7 +67,7 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         # regex lambda for checking date formats in path (to avoid calendars)
-        contains_date = lambda path: bool(re.search(r'\b\d{4}-\d{2}-\d{2}\b', path))
+        contains_date = lambda path: bool(re.search(r'\d{4}-\d{2}', path))
         
         if parsed.scheme not in set(["http", "https"]):
             return False
@@ -129,5 +129,5 @@ def blacklist_hasher():
             # adding to set
             BLACKLIST.add(blacklist_hash)
 
-    print("Number of items in the blacklist: " + BLACKLIST.length)
+    print("Number of items in the blacklist: ", len(BLACKLIST))
             
