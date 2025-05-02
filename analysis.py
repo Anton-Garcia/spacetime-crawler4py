@@ -19,10 +19,11 @@ STOPWORDS = [
 ]
 
 #one file for each url; same number of files as number of urls downloaded
-total_files = 0;
+total_files = 0
 
-#variable to hold the length of the longest file, in words
-longest_file = 0;
+#variable to hold the length of the longest file, in words, and its url
+longest_file = 0
+longest_file_url = ""
 
 #dictionary to hold all words and their frequencies
 master_token_count = dict()
@@ -32,13 +33,17 @@ subdomains = dict()
 
 def file_reader():
     #allows function to use the values of the global variables, not local ones
-    global total_files, longest_file, master_token_count, subdomains
+    global total_files, longest_file, longest_file_url, master_token_count, subdomains
 
     for file in folder_path.iterdir():
         #####FINDING THE NUMBER OF DOCUMENTS##### 
         total_files += 1
         
         #####FINDING THE LONGEST DOCUMENT#####    
+
+        #When we turned the urls into files, we had to change the / to avoid bad filenames
+        #this retuns the name back to the original url
+        url_name = file.name.replace('_', '/');
 
         #feading the file directly into the tokenize method gives a list of 
         #all tokens in the file
@@ -48,6 +53,7 @@ def file_reader():
         #keep track of which file is the longest
         if(length_of_file > longest_file):
             longest_file = length_of_file
+            longest_file_url = url_name
 
         #####FINDING MOST COMMON WORDS######
 
@@ -57,9 +63,7 @@ def file_reader():
 
         #####FINDING SUBDOMAIN PAGE COUNTS#####
           
-        #When we turned the urls into files, we had to change the / to avoid bad filenames
-        #this retuns the name back to the original url
-        url_name = file.name.replace('_', '/');
+        #first, extract the subdomain from the url
         subdomain = sub_extracter(url_name)
 
         #if the subdomain is already in the dictionary, we've ran into another page in the
@@ -120,19 +124,24 @@ def sub_extracter(url):
             return url
 
 
+def report_writer():
+   with open("report.txt", 'w') as file:
+        #go through all pages and collect all metrics
+        file_reader()
+        #remove stopwords from the token dictionary
+        dictionary_sanitizer(master_token_count)
+
+        file.write(f"Total number of files downloaded: {total_files}\n\n")
+
+        file.write(f"URL of the longest file: {longest_file_url}\n")
+        file.write(f"Length of the longest file: {longest_file}\n\n")
+
+        file.write("Top 50 most common words:\n")
+        doctools.frequency_print(master_token_count, 50, file)
+
+        file.write("\nSubdomain Frequencies:\n")
+        doctools.frequency_print(subdomains, -1, file)
+
 
 if __name__ == "__main__":
-    #go through all pages and collect all metrics
-    file_reader()
-    #remove stopwords from the token dictionary
-    dictionary_sanitizer(master_token_count)
-
-    print("Total number of files downloaded: ", total_files)
-
-    print("Length of the longest file: ", longest_file)
-
-    print("Top 50 most common words:")
-    doctools.frequency_print(master_token_count, 50)
-
-    print("Subdomain Frequencies:")
-    doctools.frequency_print(subdomains, -1)
+    report_writer()
