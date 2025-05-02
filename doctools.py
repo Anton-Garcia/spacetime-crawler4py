@@ -99,19 +99,20 @@ look this up), where n is the number of items in the dictionary. Iterating throu
 the dictionary once also gives an O(n) time, but it is upper bounded by the sorting.
 So, the function runs in O(n log n) time, where n is the number of items in word_frequencies
 '''
-def frequency_print(word_frequencies, amount):
+def frequency_print(word_frequencies, amount, file):
     #sort the list of words by frequency (item[1]), decreasing (reverse=True)
     sorted_freq = sorted(word_frequencies.items(), key=lambda item: item[1], reverse=True)
     
     #print them out
     #MODIFIED FOR ASSIGNMENT 2 SO IT PRINTS A VARIABLE AMOUNT IF NECESSARY
+    #MODIFIED TO PRINT TO A FILE - THAT IS THE ONLY USE CASE IN THIS PROHECT   
     if(amount == -1):
         for word, freq in sorted_freq:
-            print(f"{word} - {freq}")
+            file.write(f"{word} - {freq}\n")
 
     else:
         for word, freq in sorted_freq[:amount]:
-            print(f"{word} - {freq}")
+            file.write(f"{word} - {freq}\n")
 
 '''
 The program runs in linear-logarithmic time:
