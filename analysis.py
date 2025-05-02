@@ -60,6 +60,17 @@ def file_reader():
         #When we turned the urls into files, we had to change the / to avoid bad filenames
         #this retuns the name back to the original url
         url_name = file.name.replace('_', '/');
+        subdomain = sub_extracter(url_name)
+
+        #if the subdomain is already in the dictionary, we've ran into another page in the
+        #subdomain. Add one to the count of pages
+        if subdomain in subdomains.keys():
+            subdomains[subdomain] += 1
+        
+        #if the subdomain is not in the dictionary, we've found a new subdomain. Add it to
+        #the dictionary, with a page count of 1
+        else:
+            subdomains[subdomain] = 1
 
         
 #function to add two dictionaries together
@@ -79,12 +90,49 @@ def dictionary_sanitizer(dictionary):
         if word in STOPWORDS:
             del dictionary[word]
 
+#extracts the subdomain of the url
+def sub_extracter(url):
+    #in our crawl, we only accept schemes of https or http, so we
+    #only check for these two scenarios, and remove them accordingly
+    if(url.startswith("https://")):
+        url = url[8:]
+        
+        #if the page is not the root, it has a /...
+        #we dont have to worry about fragments (#) or
+        #queries (?) because we removed them. Finds the 
+        #end of the subdomain accordingly
+        stop_index = url.find("/")
+        if(stop_index != -1):
+            return url[:stop_index]
+        
+        else:
+            return url
+    
+    #same as the above example except accounts for the
+    #missing s in https
+    else:
+        url = url[7:]
+        stop_index = url.find("/")
+        if(stop_index != -1):
+            return url[:stop_index]
+        
+        else:
+            return url
+
 
 
 if __name__ == "__main__":
+    #go through all pages and collect all metrics
     file_reader()
+    #remove stopwords from the token dictionary
     dictionary_sanitizer(master_token_count)
+
     print("Total number of files downloaded: ", total_files)
+
     print("Length of the longest file: ", longest_file)
+
     print("Top 50 most common words:")
-    doctools.frequency_print(master_token_count)
+    doctools.frequency_print(master_token_count, 50)
+
+    print("Subdomain Frequencies:")
+    doctools.frequency_print(subdomains, -1)
