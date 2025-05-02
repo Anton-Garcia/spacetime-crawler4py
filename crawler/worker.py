@@ -6,6 +6,7 @@ from utils import get_logger
 import scraper
 import time
 from extraction import process_webpage_text
+from analysis import report_writer
 
 class Worker(Thread):
     def __init__(self, worker_id, config, frontier):
@@ -26,6 +27,9 @@ class Worker(Thread):
                 tbd_url = self.frontier.get_tbd_url()
                 if not tbd_url:
                     self.logger.info("Frontier is empty. Stopping Crawler.")
+                    #do the analytics and report writing after the crawler is done
+                    #automation is cool B)
+                    report_writer()
                     break
                 resp = download(tbd_url, self.config, self.logger)
                 #Additional function - grab the text from the page to be used
