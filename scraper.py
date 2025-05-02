@@ -2,7 +2,6 @@ import re
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from utils import get_urlhash, normalize
-import shelve
 
 #valid domains for urls
 DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
