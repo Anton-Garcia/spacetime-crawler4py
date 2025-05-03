@@ -1,20 +1,19 @@
 Total number of files downloaded: 1
 
 URL of the longest file: https://canvas.eee.uci.edu/courses/assignments/1584020
-Length of the longest file: 381
+Length of the longest file: 441
 
 Top 50 most common words:
-s - 6
 theatre - 5
-re - 4
 movie - 4
 chicken - 4
-ve - 3
 jack - 3
 black - 3
 go - 2
 movies - 2
 say - 2
+`` - 2
+... - 2
 even - 2
 made - 2
 almost - 2
@@ -25,8 +24,7 @@ gets - 2
 starts - 2
 begin - 2
 wake - 2
-r - 1
-copypasta - 1
+r/copypasta - 1
 rainy - 1
 day - 1
 raining - 1
@@ -46,7 +44,6 @@ ticket - 1
 walk - 1
 met - 1
 certainly - 1
-d - 1
 far - 1
 one - 1
 ever - 1
@@ -54,6 +51,9 @@ climax - 1
 film - 1
 couple - 1
 chuckles - 1
+mid-tier - 1
+suddenly - 1
+jason - 1
 
 Subdomain Frequencies:
 canvas.eee.uci.edu - 1
