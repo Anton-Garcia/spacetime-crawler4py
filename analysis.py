@@ -3,7 +3,10 @@ import doctools
 from nltk.corpus import stopwords
 import string
 
+#folder path of all documents downloaded from crawling
 folder_path = Path("text_content")
+
+#used for token filtering - we only want relevant words, not random tokens
 STOPWORDS = set(stopwords.words("english"))
 PUNCTUATION = set(string.punctuation)
 
@@ -81,6 +84,7 @@ def dictionary_adder(dict1, dict2):
 #function to clean stopwords out of dictionary
 def dictionary_sanitizer(dictionary):
     for word in list(dictionary):
+        #Filters out stopwords, punctuation, and other tokens like 's
         if word in STOPWORDS or word in PUNCTUATION or word.startswith("'"):
             del dictionary[word]
 
