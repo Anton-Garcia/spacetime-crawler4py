@@ -1,23 +1,11 @@
 from pathlib import Path
 import doctools
-import nltk
+from nltk.corpus import stopwords
+import string
 
 folder_path = Path("text_content")
-STOPWORDS = [
-    "a", "about", "above", "after", "again", "against", "all", "am", "an", "and", "any", "are", "aren't", "as", "at",
-    "be", "because", "been", "before", "being", "below", "between", "both", "but", "by", "can't", "cannot", "could",
-    "couldn't", "did", "didn't", "do", "does", "doesn't", "doing", "don't", "down", "during", "each", "few", "for",
-    "from", "further", "had", "hadn't", "has", "hasn't", "have", "haven't", "having", "he", "he'd", "he'll", "he's",
-    "her", "here", "here's", "hers", "herself", "him", "himself", "his", "how", "how's", "i", "i'd", "i'll", "i'm",
-    "i've", "if", "in", "into", "is", "isn't", "it", "it's", "its", "itself", "let's", "me", "more", "most", "mustn't",
-    "my", "myself", "no", "nor", "not", "of", "off", "on", "once", "only", "or", "other", "ought", "our", "ours",
-    "ourselves", "out", "over", "own", "same", "shan't", "she", "she'd", "she'll", "she's", "should", "shouldn't", "so",
-    "some", "such", "than", "that", "that's", "the", "their", "theirs", "them", "themselves", "then", "there", "there's",
-    "these", "they", "they'd", "they'll", "they're", "they've", "this", "those", "through", "to", "too", "under", "until",
-    "up", "very", "was", "wasn't", "we", "we'd", "we'll", "we're", "we've", "were", "weren't", "what", "what's", "when",
-    "when's", "where", "where's", "which", "while", "who", "who's", "whom", "why", "why's", "with", "won't", "would",
-    "wouldn't", "you", "you'd", "you'll", "you're", "you've", "your", "yours", "yourself", "yourselves"
-]
+STOPWORDS = set(stopwords.words("english"))
+PUNCTUATION = set(string.punctuation)
 
 #one file for each url; same number of files as number of urls downloaded
 total_files = 0
@@ -49,7 +37,7 @@ def file_reader():
 
             #feading the file directly into the tokenize method gives a list of 
             #all tokens in the file
-            tokenized = nltk.word_tokenize(file)
+            tokenized = doctools.tokenize(file)
             length_of_file = len(tokenized)
 
             #keep track of which file is the longest
@@ -93,7 +81,7 @@ def dictionary_adder(dict1, dict2):
 #function to clean stopwords out of dictionary
 def dictionary_sanitizer(dictionary):
     for word in list(dictionary):
-        if word in STOPWORDS:
+        if word in STOPWORDS or word in PUNCTUATION or word.startswith("'"):
             del dictionary[word]
 
 #extracts the subdomain of the url
