@@ -1,5 +1,6 @@
 from pathlib import Path
 import doctools
+import nltk
 
 folder_path = Path("text_content")
 STOPWORDS = [
@@ -47,7 +48,7 @@ def file_reader():
 
         #feading the file directly into the tokenize method gives a list of 
         #all tokens in the file
-        tokenized = doctools.tokenize(file)
+        tokenized = nltk.word_tokenize(file)
         length_of_file = len(tokenized)
 
         #keep track of which file is the longest
