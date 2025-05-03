@@ -85,7 +85,7 @@ def dictionary_adder(dict1, dict2):
 def dictionary_sanitizer(dictionary):
     for word in list(dictionary):
         #Filters out stopwords, punctuation, and other tokens like 's
-        if word in STOPWORDS or word in PUNCTUATION or word.startswith("'"):
+        if word in STOPWORDS or not word.isalnum() or word.startswith("'"):
             del dictionary[word]
 
 #extracts the subdomain of the url
