@@ -118,13 +118,14 @@ def sub_extracter(url):
             return url
 
 
-def report_writer():
+def report_writer(links_crawled):
    with open("report.txt", 'w') as file:
         #go through all pages and collect all metrics
         file_reader()
         #remove stopwords from the token dictionary
         dictionary_sanitizer(master_token_count)
 
+        file.write(f"Total number of links crawled: {links_crawled}\n\n")
         file.write(f"Total number of files downloaded: {total_files}\n\n")
 
         file.write(f"URL of the longest file: {longest_file_url}\n")
