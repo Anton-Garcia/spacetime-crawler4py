@@ -22,6 +22,10 @@ class Worker(Thread):
         #take all blacklist urls in the blacklist file and load them
         #(used later in is_valid())
         scraper.blacklist_hasher()
+
+        #variable for counting links crawled - hoping for no server crashes during
+        #real crawl time, so we can get an accurate count
+        links_crawled = 0
         while True:
             try:
                 tbd_url = self.frontier.get_tbd_url()
@@ -29,8 +33,9 @@ class Worker(Thread):
                     self.logger.info("Frontier is empty. Stopping Crawler.")
                     #do the analytics and report writing after the crawler is done
                     #automation is cool B)
-                    report_writer()
+                    report_writer(links_crawled)
                     break
+                links_crawled += 1
                 resp = download(tbd_url, self.config, self.logger)
                 #Additional function - grab the text from the page to be used
                 #for statistics later
