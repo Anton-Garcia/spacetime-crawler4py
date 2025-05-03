@@ -1,5 +1,6 @@
 import sys
 import string
+import nltk
 
 #this is the list of all alpha-numeric characters
 ALPHANUM = list(string.ascii_letters + string.digits)
@@ -52,8 +53,9 @@ def tokenize(TextFilePath):
 
             #grab each line
             for line in file:
-                #split the line into words
-                words = split(line)
+                #####MODIFIED FOR ASSIGNMENT 2#####
+                #####USE NLTK INSTEAD OF OWN SPLIT FUNCTION#####     
+                words = nltk.word_tokenize(line)
 
                 #add each word to the set
                 for word in words:
