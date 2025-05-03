@@ -1,14 +1,12 @@
 from pathlib import Path
 import doctools
 from nltk.corpus import stopwords
-import string
 
 #folder path of all documents downloaded from crawling
 folder_path = Path("text_content")
 
 #used for token filtering - we only want relevant words, not random tokens
 STOPWORDS = set(stopwords.words("english"))
-PUNCTUATION = set(string.punctuation)
 
 #one file for each url; same number of files as number of urls downloaded
 total_files = 0
@@ -139,4 +137,4 @@ def report_writer(links_crawled):
 
 
 if __name__ == "__main__":
-    report_writer()
+    report_writer(1)

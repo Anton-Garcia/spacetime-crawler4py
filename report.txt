@@ -1,3 +1,5 @@
+Total number of links crawled: 1
+
 Total number of files downloaded: 1
 
 URL of the longest file: https://canvas.eee.uci.edu/courses/assignments/1584020
@@ -12,8 +14,6 @@ black - 3
 go - 2
 movies - 2
 say - 2
-`` - 2
-... - 2
 even - 2
 made - 2
 almost - 2
@@ -24,7 +24,6 @@ gets - 2
 starts - 2
 begin - 2
 wake - 2
-r/copypasta - 1
 rainy - 1
 day - 1
 raining - 1
@@ -51,9 +50,12 @@ climax - 1
 film - 1
 couple - 1
 chuckles - 1
-mid-tier - 1
 suddenly - 1
 jason - 1
+momoa - 1
+appear - 1
+boxing - 1
+ring - 1
 
 Subdomain Frequencies:
 canvas.eee.uci.edu - 1
