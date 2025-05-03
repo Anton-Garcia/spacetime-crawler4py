@@ -37,45 +37,46 @@ def file_reader():
     global total_files, longest_file, longest_file_url, master_token_count, subdomains
 
     for file in folder_path.iterdir():
-        #####FINDING THE NUMBER OF DOCUMENTS##### 
-        total_files += 1
-        
-        #####FINDING THE LONGEST DOCUMENT#####    
+        if file.is_file() and not file.name.startswith('.'):
+            #####FINDING THE NUMBER OF DOCUMENTS##### 
+            total_files += 1
+            
+            #####FINDING THE LONGEST DOCUMENT#####    
 
-        #When we turned the urls into files, we had to change the / to avoid bad filenames
-        #this retuns the name back to the original url
-        url_name = file.name.replace('_', '/');
+            #When we turned the urls into files, we had to change the / to avoid bad filenames
+            #this retuns the name back to the original url
+            url_name = file.name.replace('_', '/');
 
-        #feading the file directly into the tokenize method gives a list of 
-        #all tokens in the file
-        tokenized = nltk.word_tokenize(file)
-        length_of_file = len(tokenized)
+            #feading the file directly into the tokenize method gives a list of 
+            #all tokens in the file
+            tokenized = nltk.word_tokenize(file)
+            length_of_file = len(tokenized)
 
-        #keep track of which file is the longest
-        if(length_of_file > longest_file):
-            longest_file = length_of_file
-            longest_file_url = url_name
+            #keep track of which file is the longest
+            if(length_of_file > longest_file):
+                longest_file = length_of_file
+                longest_file_url = url_name
 
-        #####FINDING MOST COMMON WORDS######
+            #####FINDING MOST COMMON WORDS######
 
-        #get the frequency of all tokens in the document, and add them to the master dictionary
-        document_token_count = doctools.computeWordFrequencies(tokenized)
-        dictionary_adder(master_token_count, document_token_count)
+            #get the frequency of all tokens in the document, and add them to the master dictionary
+            document_token_count = doctools.computeWordFrequencies(tokenized)
+            dictionary_adder(master_token_count, document_token_count)
 
-        #####FINDING SUBDOMAIN PAGE COUNTS#####
-          
-        #first, extract the subdomain from the url
-        subdomain = sub_extracter(url_name)
+            #####FINDING SUBDOMAIN PAGE COUNTS#####
+            
+            #first, extract the subdomain from the url
+            subdomain = sub_extracter(url_name)
 
-        #if the subdomain is already in the dictionary, we've ran into another page in the
-        #subdomain. Add one to the count of pages
-        if subdomain in subdomains.keys():
-            subdomains[subdomain] += 1
-        
-        #if the subdomain is not in the dictionary, we've found a new subdomain. Add it to
-        #the dictionary, with a page count of 1
-        else:
-            subdomains[subdomain] = 1
+            #if the subdomain is already in the dictionary, we've ran into another page in the
+            #subdomain. Add one to the count of pages
+            if subdomain in subdomains.keys():
+                subdomains[subdomain] += 1
+            
+            #if the subdomain is not in the dictionary, we've found a new subdomain. Add it to
+            #the dictionary, with a page count of 1
+            else:
+                subdomains[subdomain] = 1
 
         
 #function to add two dictionaries together
