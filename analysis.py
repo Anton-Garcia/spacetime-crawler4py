@@ -39,18 +39,26 @@ def file_reader():
             #feading the file directly into the tokenize method gives a list of 
             #all tokens in the file
             tokenized = doctools.tokenize(file)
-            length_of_file = len(tokenized)
 
-            #keep track of which file is the longest
-            if(length_of_file > longest_file):
-                longest_file = length_of_file
+            #turn the tokens into a dictionary, for use later in finding the most frequent words
+            document_token_count = doctools.computeWordFrequencies(tokenized)
+
+            #sanitize the dictionary to remove invalid words
+            sanitized_tokens = dictionary_sanitizer(document_token_count)
+            
+            #compute the length of the document by summing up the totals in the dictionary
+            file_length = dictionary_word_length(sanitized_tokens)
+
+            #check if this file is the longest so far, and update accordingly
+            if file_length > longest_file:
+                longest_file = file_length
                 longest_file_url = url_name
 
             #####FINDING MOST COMMON WORDS######
 
-            #get the frequency of all tokens in the document, and add them to the master dictionary
-            document_token_count = doctools.computeWordFrequencies(tokenized)
-            dictionary_adder(master_token_count, document_token_count)
+            #add the dictionary for this document into the master dictionary
+            #to keep track of a crawl-total
+            dictionary_adder(master_token_count, sanitized_tokens)
 
             #####FINDING SUBDOMAIN PAGE COUNTS#####
             
@@ -86,6 +94,14 @@ def dictionary_sanitizer(dictionary):
         if word in STOPWORDS or not word.isalpha() or word.startswith("'") or len(word) < 2:
             del dictionary[word]
 
+#computes the total length of the document, from a dictionary of tokens [token: amount]
+def dictionary_word_length(dictionary):
+    total_words = 0
+    for key, value in dictionary.items():
+        total_words += value
+    return total_words
+
+
 #extracts the subdomain of the url
 def sub_extracter(url):
     #in our crawl, we only accept schemes of https or http, so we
@@ -120,8 +136,6 @@ def report_writer(links_crawled):
    with open("report.txt", 'w') as file:
         #go through all pages and collect all metrics
         file_reader()
-        #remove stopwords from the token dictionary
-        dictionary_sanitizer(master_token_count)
 
         file.write(f"Total number of links crawled: {links_crawled}\n\n")
         file.write(f"Total number of files downloaded: {total_files}\n\n")
