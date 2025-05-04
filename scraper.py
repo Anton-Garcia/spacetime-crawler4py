@@ -1,12 +1,16 @@
 import re
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qs
 from utils import get_urlhash, normalize
 
 #valid domains for urls
 DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
 #blacklisted url hashes
 BLACKLIST = set()
+#blacklisted query parameters that cook our crawler
+QUERY_BLACKLIST = {"action", "download", "login", "auth", "token", "session", "sid", "ref", "src", 
+                   "replytocom", "comment", "attachment", "file", "export", "apikey", "access_token"}
+
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -90,10 +94,13 @@ def is_valid(url):
         elif(parsed.hostname.endswith("today.uci.edu") and parsed.path.startswith("/department/information_computer_sciences/") == False):
             return False
         
-        #reject all queries; 99% of them were leading to http errors when crawling and taking up large amount of time for downloads,
-        #so we choose to just reject all urls with queries
+        #reject queries asking us to download, login, authenticate, etc. because these can be problematic for our crawler
         elif(parsed.query):
-            return False
+            #turns the query string into a dictonary - that way we can check its exact parameters to our blacklist
+            param_dictionary = parse_qs(parsed.query)
+            for param in param_dictionary:
+                if param.lower() in QUERY_BLACKLIST:
+                    return False
 
         #detects calendar traps - calendars have urls with the date in them, formatting shown in the
         #lambda function above - (for example: 2019-04-19)
@@ -129,4 +136,3 @@ def blacklist_hasher():
             BLACKLIST.add(blacklist_hash)
 
     print("Number of items in the blacklist: ", len(BLACKLIST))
-            
