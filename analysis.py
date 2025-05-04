@@ -44,10 +44,10 @@ def file_reader():
             document_token_count = doctools.computeWordFrequencies(tokenized)
 
             #sanitize the dictionary to remove invalid words
-            sanitized_tokens = dictionary_sanitizer(document_token_count)
+            dictionary_sanitizer(document_token_count)
             
             #compute the length of the document by summing up the totals in the dictionary
-            file_length = dictionary_word_length(sanitized_tokens)
+            file_length = dictionary_word_length(document_token_count)
 
             #check if this file is the longest so far, and update accordingly
             if file_length > longest_file:
@@ -58,7 +58,7 @@ def file_reader():
 
             #add the dictionary for this document into the master dictionary
             #to keep track of a crawl-total
-            dictionary_adder(master_token_count, sanitized_tokens)
+            dictionary_adder(master_token_count, document_token_count)
 
             #####FINDING SUBDOMAIN PAGE COUNTS#####
             
