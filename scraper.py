@@ -8,9 +8,16 @@ DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
 #blacklisted url hashes
 BLACKLIST = set()
 #blacklisted query parameters that cook our crawler
-QUERY_BLACKLIST = {"action", "download", "login", "auth", "token", "session", "sid", "ref", "src", 
-                   "replytocom", "comment", "attachment", "file", "export", "apikey", "access_token", "redirect_to", "share", "filter", "eventDate", "day", "month", "year",
-                    "tribe-bar-date"}
+QUERY_BLACKLIST = {"action", "download", "login", "auth", "token", "session", "sid", "ref", "src",
+    "replytocom", "comment", "attachment", "file", "export", "apikey", "access_token",
+    "redirect_to", "share", "filter", "eventDate", "day", "month", "year", "tribe-bar-date", "tribe_events_cat",
+    "ical", "outlook-ical", "eventDisplay", "page", "paged", "page_id", "offset", "limit", "start",
+    "count", "per_page", "scroll", "sort", "order", "orderby", "direction", "view",
+    "display", "layout", "mode", "sessionid", "phpsessid", "utm_source", "utm_medium",
+    "utm_campaign", "utm_term", "utm_content", "fbclid", "gclid", "yclid", "mc_cid",
+    "mc_eid", "tracking", "abtest", "shared", "tweet", "fb", "post", "startDate", "endDate",
+    "from", "to", "timestamp", "ts", "time", "pdf", "print", "dl", "download_file",
+    "callback", "jsonp", "nocache", "preview", "debug", "testmode"}
 
 
 def scraper(url, resp):
@@ -93,6 +100,10 @@ def is_valid(url):
         
         #checks valid domain name with starting path (for last case today.uci.edu/department/information_computer_sciences/)
         elif(parsed.hostname.endswith("today.uci.edu") and parsed.path.startswith("/department/information_computer_sciences/") == False):
+            return False
+        
+        #ban wics.ics.uci.edu because I've had enough of their cralwer traps
+        elif(parsed.hostname.endswith("wics.ics.uci.edu") and parsed.path.find("/events") != -1):
             return False
         
         #reject queries asking us to download, login, authenticate, etc. because these can be problematic for our crawler
