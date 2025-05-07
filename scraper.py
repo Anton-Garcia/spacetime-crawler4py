@@ -9,7 +9,8 @@ DOMAIN = ["ics.uci.edu", "cs.uci.edu", "informatics.uci.edu", "stat.uci.edu"]
 BLACKLIST = set()
 #blacklisted query parameters that cook our crawler
 QUERY_BLACKLIST = {"action", "download", "login", "auth", "token", "session", "sid", "ref", "src", 
-                   "replytocom", "comment", "attachment", "file", "export", "apikey", "access_token"}
+                   "replytocom", "comment", "attachment", "file", "export", "apikey", "access_token", "redirect_to", "share", "filter", "eventDate", "day", "month", "year",
+                    "tribe-bar-date"}
 
 
 def scraper(url, resp):
