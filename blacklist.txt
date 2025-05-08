@@ -972,5 +972,3 @@ http://www.ics.uci.edu/grad/policies/index.php
 http://www.informatics.uci.edu/menu-very-top/news
 http://www.informatics.uci.edu/menu-very-top/site-map
 https://www.informatics.uci.edu/contact
-https://www.cs.uci.edu
-https://www.ics.uci.edu

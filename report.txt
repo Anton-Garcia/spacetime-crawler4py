@@ -1,5 +1,8 @@
 Total number of links crawled: 10149
 
+Total number of blacklisted links: 974
+(Blacklisted links come from no content or exact content matches)
+
 Total number of files downloaded: 8839
 
 URL of the longest file: https://cml.ics.uci.edu/category/aiml
